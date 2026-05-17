@@ -1,0 +1,59 @@
+# Binaries and build output
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+/bin/
+/dist/
+/tmp/
+
+# Go test and coverage artifacts
+*.test
+*.out
+coverage.*
+*.coverprofile
+
+# Go workspace (local multi-module dev)
+go.work
+go.work.sum
+
+# Dependency vendoring (uncomment if you commit vendor/)
+# vendor/
+
+# Environment and secrets
+.env
+.env.*
+!.env.example
+
+# Firebase / GCP service account keys
+*-firebase-adminsdk-*.json
+*serviceAccount*.json
+*service-account*.json
+firebase-adminsdk*.json
+credentials.json
+
+# User-uploaded media (see UPLOAD_DIR / docker-compose)
+/storage/
+
+# IDE and editor
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Debug and profiling
+debug
+__debug_bin
+*.prof
+*.pprof
+
+# Air (live reload) — optional dev tool
+tmp/
+.air.toml.bak
