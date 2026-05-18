@@ -16,20 +16,9 @@ services:
       - "127.0.0.1:8000:8000"
     depends_on:
       - mongo
-    environment:
-      PORT: "8000"
-      MONGODB_URI: "mongodb://mongo:27017/goal_tracker"
-
-      AUTH_SIGNUP_PASSWORD: "change_this"
-      JWT_SECRET: "super_secret"
-
-      JWT_ISSUER: "goal-tracker"
-      JWT_AUDIENCE: "goal-tracker"
-
-      UPLOAD_DIR: "/app/storage"
-
-      BASE_URL: "https://api.example.com"
-
+    env_file:
+      - .env
+      
     volumes:
       - ./storage:/app/storage
 
