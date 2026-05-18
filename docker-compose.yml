@@ -4,32 +4,38 @@ services:
   mongo:
     image: mongo:7
     restart: unless-stopped
-    ports:
-      - "27017:27017"
     volumes:
       - mongo-data:/data/db
+    networks:
+      - app-network
 
   backend:
-    image: golang:1.25
-    working_dir: /app
+    build: .
+    restart: unless-stopped
     depends_on:
       - mongo
-    ports:
-      - "8000:8000"
-    volumes:
-      - ./:/app
-      - ./storage:/app/storage
     environment:
       PORT: "8000"
-      # For local dev (inside compose network, mongo is reachable as host `mongo`)
       MONGODB_URI: "mongodb://mongo:27017/goal_tracker"
-      AUTH_SIGNUP_PASSWORD: "change_me"
-      JWT_SECRET: "dev_jwt_secret_change_me"
+
+      AUTH_SIGNUP_PASSWORD: "change_this"
+      JWT_SECRET: "super_secret"
+
       JWT_ISSUER: "goal-tracker"
       JWT_AUDIENCE: "goal-tracker"
+
       UPLOAD_DIR: "/app/storage"
-      BASE_URL: "http://localhost:8000"
-    command: sh -c "go mod download && go run ./cmd/server"
+
+      BASE_URL: "https://api.example.com"
+
+    volumes:
+      - ./storage:/app/storage
+
+    networks:
+      - app-network
 
 volumes:
   mongo-data:
+
+networks:
+  app-network:
