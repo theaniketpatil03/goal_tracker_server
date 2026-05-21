@@ -322,6 +322,35 @@ func (h *TaskHandler) Update(c *gin.Context) {
 	c.JSON(http.StatusOK, h.toResponse(updated))
 }
 
+func (h *TaskHandler) Delete(c *gin.Context) {
+	userID, ok := middleware.UserIDFromContext(c)
+	if !ok {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "unauthorized"})
+		return
+	}
+
+	id, err := primitive.ObjectIDFromHex(c.Param("id"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid id"})
+		return
+	}
+
+	ctx, cancel := context.WithTimeout(c.Request.Context(), 10*time.Second)
+	defer cancel()
+
+	filter := bson.M{"_id": id, "userId": userID}
+	res, err := h.tasks.DeleteOne(ctx, filter)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "delete failed"})
+		return
+	}
+	if res.DeletedCount == 0 {
+		c.JSON(http.StatusNotFound, gin.H{"error": "not found"})
+		return
+	}
+	c.Status(http.StatusNoContent)
+}
+
 func (h *TaskHandler) toResponse(t models.Task) taskResponse {
 	var rewardID *string
 	if t.RewardID != nil {

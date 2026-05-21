@@ -76,6 +76,7 @@ func NewRouter(cfg config.Config, mongoClient *mongo.Client) *gin.Engine {
 		api.POST("/tasks", taskHandler.Create)
 		api.GET("/tasks", taskHandler.List)
 		api.PATCH("/tasks/:id", taskHandler.Update)
+		api.DELETE("/tasks/:id", taskHandler.Delete)
 	}
 
 	r.NoRoute(func(c *gin.Context) {

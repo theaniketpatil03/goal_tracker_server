@@ -18,7 +18,9 @@ services:
       - mongo
     env_file:
       - .env
-      
+    environment:
+      # Public URL for media links stored in MongoDB (override in .env if needed)
+      BASE_URL: https://aniketpatil.xyz
     volumes:
       - ./storage:/app/storage
 
