@@ -66,6 +66,21 @@ func EnsureIndexes(mongoClient *mongo.Client, cfg config.Config) error {
 		Options: options.Index().SetName("tasks_userId_priority_endAt"),
 	})
 
+	// Finance entries.
+	finances := db.Collection("finances")
+	_, _ = finances.Indexes().CreateOne(ctx, mongo.IndexModel{
+		Keys:    bson.D{{Key: "userId", Value: 1}, {Key: "time", Value: -1}},
+		Options: options.Index().SetName("finances_userId_time"),
+	})
+	_, _ = finances.Indexes().CreateOne(ctx, mongo.IndexModel{
+		Keys:    bson.D{{Key: "userId", Value: 1}, {Key: "type", Value: 1}, {Key: "time", Value: -1}},
+		Options: options.Index().SetName("finances_userId_type_time"),
+	})
+	_, _ = finances.Indexes().CreateOne(ctx, mongo.IndexModel{
+		Keys:    bson.D{{Key: "userId", Value: 1}, {Key: "category", Value: 1}, {Key: "time", Value: -1}},
+		Options: options.Index().SetName("finances_userId_category_time"),
+	})
+
 	return nil
 }
 

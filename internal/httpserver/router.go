@@ -18,6 +18,7 @@ func NewRouter(cfg config.Config, mongoClient *mongo.Client) *gin.Engine {
 	quoteHandler := handlers.NewQuoteHandler(mongoClient, cfg)
 	rewardHandler := handlers.NewRewardHandler(mongoClient, cfg)
 	taskHandler := handlers.NewTaskHandler(mongoClient, cfg)
+	financeHandler := handlers.NewFinanceHandler(mongoClient, cfg)
 	notificationHandler := handlers.NewNotificationHandler(mongoClient, cfg)
 
 	r := gin.New()
@@ -77,6 +78,12 @@ func NewRouter(cfg config.Config, mongoClient *mongo.Client) *gin.Engine {
 		api.GET("/tasks", taskHandler.List)
 		api.PATCH("/tasks/:id", taskHandler.Update)
 		api.DELETE("/tasks/:id", taskHandler.Delete)
+
+		// Finance
+		api.POST("/finance", financeHandler.Create)
+		api.GET("/finance", financeHandler.List)
+		api.PATCH("/finance/:id", financeHandler.Update)
+		api.DELETE("/finance/:id", financeHandler.Delete)
 	}
 
 	r.NoRoute(func(c *gin.Context) {
